@@ -164,4 +164,4 @@ cython_debug/
 # Dev/yatube_project/.gitignore
 
 .vscode/
-.venv/
+.venv/.vscode
