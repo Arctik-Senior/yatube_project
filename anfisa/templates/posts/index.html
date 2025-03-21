@@ -74,6 +74,13 @@
             все записи группы</a>
         </article>
         <!-- под последним постом нет линии -->
+        {% for post in page_obj %}
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.text }}</p>
+        <p><small>Автор: {{ post.author }} | Дата: {{ post.pub_date }}</small></p>
+      {% endfor %}
+    
+      {% include 'includes/paginator.html' %}
       </div>
 
     <!-- Использованы классы бустрапа: -->

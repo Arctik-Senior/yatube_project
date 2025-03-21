@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+
 # Create your models here.
 
 User = get_user_model()
@@ -35,3 +36,19 @@ class Group(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Create(models.Model):
+    text = models.TextField(verbose_name='Текст поста',
+                            null=False, blank=False)
+    group = models.ForeignKey(
+        'Group',
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name='create_posts',
+        verbose_name="Группа"
+    )
+
+    def __str__(self):
+        return self.text
