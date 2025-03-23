@@ -15,28 +15,21 @@
                 <form method="post" action="{% url 'posts:profile' username=user.username %}">
                   {% csrf_token %}           
                   <div class="form-group row my-3 p-3">
-                    <label for="id_text">
-                      Текст поста                  
-                      <span class="required text-danger" >*</span>                  
-                    </label>
-                    <textarea name="text" cols="40" rows="10" class="form-control" required id="id_text">
-                    </textarea>
+                    {{ form.text.label_tag }}
+                    {{ form.text }}
                     <small id="id_text-help" class="form-text text-muted">
                       Текст нового поста
                     </small>
                   </div>
+  
                   <div class="form-group row my-3 p-3">
-                    <label for="id_group">
-                      Группа                  
-                    </label>
-                    <select name="group" class="form-control" id="id_group">
-                      <option value="" selected>---------</option>
-                      <option value="1">Группа: Лев Толстой – зеркало русской революции</option>
-                    </select>
+                    {{ form.group.label_tag }}
+                    {{ form.group }}
                     <small id="id_group-help" class="form-text text-muted">
                       Группа, к которой будет относиться пост
                     </small>
                   </div>
+  
                   <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">
                       Сохранить
