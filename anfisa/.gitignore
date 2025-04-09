@@ -172,3 +172,9 @@ cython_debug/
 
 echo '.vscode' >> .gitignore
 git rm -r --cached .vscode
+
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover 
