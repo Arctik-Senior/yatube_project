@@ -9,30 +9,19 @@ from .forms import PostForm
 
 POSTS_PER_PAGE = 10
 LEN_SHORT_POST = 30
+LENGTH = 10
 
 
 def index(request):
-    template = 'posts/index.html'
-    text = 'Это главная страница проекта Yatube'
-    post_list = Post.objects.all().order_by('-pub_date')
-    # Если порядок сортировки определен в классе Meta модели,
-    # запрос будет выглядеть так:
-    # post_list = Post.objects.all()
-    # Показывать по 10 записей на странице.
-    paginator = Paginator(post_list, 5)
-
-    # Из URL извлекаем номер запрошенной страницы - это значение параметра page
-    page_number = request.GET.get('page')
-
-    # Получаем набор записей для страницы с запрошенным номером
+    posts = Post.objects.all()
+    paginator = Paginator(posts, LENGTH)
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    # posts = Post.objects.all()
-
     context = {
-        'text': text,
-        'page_obj': page_obj,
+        "page_obj": page_obj,
+        "title": "Последние обновления на сайте",
     }
-    return render(request, template, context)
+    return render(request, "posts/index.html", context)
 
 
 def group_posts(request, slug):

@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class Group(models.Model):
     title = models.TextField(max_length=200, verbose_name='Название группы')
     slug = models.SlugField(unique=True, verbose_name='Адрес группы')
@@ -15,7 +16,10 @@ class Group(models.Model):
 
 
 class Post(models.Model):
-    text = models.TextField(null=True, verbose_name="Текст поста")
+    text = models.TextField(null=True,
+                            verbose_name="Текст поста",
+                            help_text='Введите текст поста')
+
     pub_date = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Дата публикации"
@@ -34,6 +38,7 @@ class Post(models.Model):
         null=True,
         on_delete=models.SET_NULL,
         related_name='posts',
+        help_text='Группа, к которой будет относиться пост'
     )
 
     def __str__(self):
