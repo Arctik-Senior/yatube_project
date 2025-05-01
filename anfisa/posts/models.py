@@ -40,6 +40,11 @@ class Post(models.Model):
         related_name='posts',
         help_text='Группа, к которой будет относиться пост'
     )
+    image = models.ImageField(
+        'Картинка',
+        upload_to='posts/',
+        blank=True
+    )
 
     def __str__(self):
         return self.text
@@ -62,3 +67,23 @@ class Create(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(
+        'Post',
+        on_delete=models.CASCADE,
+        related_name='comments',
+        verbose_name='Пост'
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='post',
+        verbose_name="Автор автор комментария",
+    )
+    pub_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата публикации"
+    )
+    text = models.TextField(verbose_name='Текст комментария')

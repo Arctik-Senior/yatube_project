@@ -1,30 +1,38 @@
 {% extends 'base.html' %}
-{% comment %} {% block title %}<h1>{{group.title}}</h1>{% endblock %} {% endcomment %}
-{% block title %}{{group.title}}{% endblock %}
+
+{% block title %}{{ group.title|default:"Сообщество" }}{% endblock %}
+
 {% block content %}
 <main>
-<style>h1{display: inline;}</style> 
-<h1>Записи сообщества:</h1>
-<h1>{{group.title}}</h1>
+  <div class="container py-3">
+    <h1 class="d-inline">Записи сообщества: {{ group.title }}</h1>
+    <p class="lead">{{ group.description }}</p>
 
-<p>{{group.description}}</p>
-{% for post in page_obj %}
-  <ul>
-    
-    <li>
-      Автор: {{ post.author.get_full_name }}
-    </li>
-    
-    <li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
+    {% if posts_exist %}
+      {% for post in page_obj %}
+        <div class="card mb-4">
+          <div class="card-body">
+            <ul class="list-unstyled mb-3">
+              <li>Автор: {{ post.author.get_full_name|default:post.author.username }}</li>
+              <li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
+            </ul>
+            
+            <p class="card-text">{{ post.text|linebreaksbr }}</p>
+            
+            <a href="{% url 'posts:post_detail' post.id %}" class="btn btn-sm btn-outline-primary">
+              Подробная информация
+            </a>
+          </div>
+        </div>
+        {% if not forloop.last %}<hr>{% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-info">
+        В этом сообществе пока нет записей.
+      </div>
+    {% endif %}
 
-  </ul>
-
-  <p>{{ post.text }}</p>
-  <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a>  
-  {% if not forloop.last %}<hr>{% endif %}
-
-{% endfor %}
-
-{% include 'includes/paginator.html' %}
-
+    {% include 'includes/paginator.html' %}
+  </div>
+</main>
 {% endblock %}
