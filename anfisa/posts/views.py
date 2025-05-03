@@ -6,12 +6,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import PostForm, CommentForm
 # Create your views here.
+from django.views.decorators.cache import cache_page
 
 POSTS_PER_PAGE = 10
 LEN_SHORT_POST = 30
 LENGTH = 10
 
 
+@cache_page(20)
 def index(request):
     post = Post.objects.all()
     paginator = Paginator(post, 10)
@@ -57,7 +59,7 @@ def profile(request, username):
 def post_detail(request, post_id):
     post = get_object_or_404(Post.objects.select_related('author', 'group'), id=post_id)  # noqa: E501
     comments = post.comments.all()
-    form = CommentForm()  # Форма только для отображения
+    form = CommentForm()
     context = {
         'post': post,
         'comments': comments,

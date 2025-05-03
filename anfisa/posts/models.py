@@ -22,6 +22,7 @@ class Post(models.Model):
 
     pub_date = models.DateTimeField(
         auto_now_add=True,
+        db_index=True,
         verbose_name="Дата публикации"
     )
     author = models.ForeignKey(
@@ -84,6 +85,7 @@ class Comment(models.Model):
     )
     pub_date = models.DateTimeField(
         auto_now_add=True,
+        db_index=True,
         verbose_name="Дата публикации"
     )
     text = models.TextField(verbose_name='Текст комментария')
