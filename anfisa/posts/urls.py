@@ -11,6 +11,6 @@ urlpatterns = [
     path('create/', views.post_create, name='create_post'),
     path('posts/<int:post_id>/edit/', views.post_edit, name='post_edit'),
     path('group/<slug:slug>/', views.group_list, name="group_list"),
-    path('posts/<int:post_id>/comment/', views.add_comment, name='add_comment'),
+    path('posts/<int:post_id>/comment/', views.add_comment, name='add_comment'),  # noqa: E501
     path('', views.index, name='index'),
 ]

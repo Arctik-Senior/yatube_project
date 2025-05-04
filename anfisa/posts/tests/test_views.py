@@ -4,6 +4,7 @@ from django.test import Client, TestCase
 from posts.models import Post, Group
 from django.urls import reverse
 from django.urls import reverse_lazy
+
 INDEX_URL = reverse_lazy('posts:index')
 
 User = get_user_model()
