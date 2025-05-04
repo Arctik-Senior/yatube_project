@@ -13,7 +13,7 @@ LEN_SHORT_POST = 30
 LENGTH = 10
 
 
-@cache_page(20)
+@cache_page(20, key_prefix='index_page')
 def index(request):
     post = Post.objects.all()
     paginator = Paginator(post, 10)
