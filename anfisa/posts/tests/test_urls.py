@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from posts.models import Post, Group
 from django.contrib.auth import get_user_model
+# from django.urls import reverse
 
 User = get_user_model()
 
@@ -35,9 +36,18 @@ class PostURLTests(TestCase):
         self.authorized_client.force_login(PostURLTests.user)
 
     def test_urls_uses_correct_template(self):
-        """URL адрес использует соответственный шаблон"""
-        for url, template in self.templates_url_names.items():
-            with self.subTest(template=template):
+        """URL-адрес использует соответствующий шаблон."""
+        templates_url_names = {
+            '/': 'posts/index.html',
+            f'/group/{self.group.slug}/': 'posts/group_list.html',
+            f'/profile/{self.user.username}/': 'posts/profile.html',
+            f'/posts/{self.post.id}/': 'posts/post_detail.html',
+            f'/posts/{self.post.id}/edit/': 'posts/create_post.html',
+            '/create/': 'posts/create_post.html',
+        }
+
+        for url, template in templates_url_names.items():
+            with self.subTest(url=url):
                 response = self.authorized_client.get(url)
                 self.assertTemplateUsed(response, template)
 
@@ -45,3 +55,7 @@ class PostURLTests(TestCase):
         """URL возвращает ошибку 404"""
         response = self.guest_client.get('/non_existent_page/')
         self.assertEqual(response.status_code, 404)
+
+    def test_404_returns_a_custom_template(self):
+        response = self.guest_client.get('/non_existent_page/')
+        self.assertTemplateUsed(response, 'core/404.html')

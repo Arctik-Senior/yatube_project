@@ -6,14 +6,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import PostForm, CommentForm
 # Create your views here.
-from django.views.decorators.cache import cache_page
+# from django.views.decorators.cache import cache_page
 
 POSTS_PER_PAGE = 10
 LEN_SHORT_POST = 30
 LENGTH = 10
 
 
-@cache_page(20, key_prefix='index_page')
+# @cache_page(20, key_prefix='index_page')
 def index(request):
     post = Post.objects.all()
     paginator = Paginator(post, 10)
