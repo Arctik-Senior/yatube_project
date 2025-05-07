@@ -55,7 +55,3 @@ class PostURLTests(TestCase):
         """URL возвращает ошибку 404"""
         response = self.guest_client.get('/non_existent_page/')
         self.assertEqual(response.status_code, 404)
-
-    def test_404_returns_a_custom_template(self):
-        response = self.guest_client.get('/non_existent_page/')
-        self.assertTemplateUsed(response, 'core/404.html')

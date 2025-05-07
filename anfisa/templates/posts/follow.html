@@ -1,0 +1,37 @@
+{%extends "base.html" %}
+{% load thumbnail %}
+    {%block title%}
+    <title>Посты авторов</title>
+    {% endblock %}
+      {%block content%}
+
+      <!-- класс py-5 создает отступы сверху и снизу блока -->
+      <div class="container py-5">
+        <h1>{{text}}</h1>
+        <h1>Последние обновления на сайте</h1>
+        <!-- под последним постом нет линии -->
+        {% include 'includes/switcher.html' %}
+        {% for post in page_obj %}
+          <p><small>Автор: {{ post.author }} | Дата: {{ post.pub_date }}</small></p>
+          <h2>{{ post.title }}</h2>
+          <p>{{ post.text }}</p>
+          {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+            <img class="card-img my-2" src="{{ im.url }}">
+          {% endthumbnail %}
+        {% if post.group and post.group.slug %}
+          <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+        {% endif %}
+          <p><a href="{% url 'posts:post_detail' post.id %}">подробная информация</a></p>
+        <hr>
+          <!-- Добавьте горизонтальную линию между постами -->
+      {% endfor %}
+      {% include 'includes/paginator.html' %}
+
+      </div>
+
+    <!-- Использованы классы бустрапа: -->
+    <!-- border-top: создаёт тонкую линию сверху блока -->
+    <!-- text-center: выравнивает текстовые блоки внутри блока по центру -->
+    <!-- py-3: контент внутри размещается с отступом сверху и снизу -->
+    {% endblock %}
+    
