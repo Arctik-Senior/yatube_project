@@ -1,8 +1,8 @@
 # from django.core.cache import cache
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
-from posts.models import Post, Group
-# from django.urls import reverse
+from posts.models import Post, Group, Follow
+from django.urls import reverse
 from django.urls import reverse_lazy
 
 INDEX_URL = reverse_lazy('posts:index')
@@ -93,3 +93,50 @@ class CachePageTest(TestCase):
         # Проверяем, что контент изменился после очистки кеша
         self.assertNotEqual(content1, content3)
 '''
+
+class TestFollow(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='test1', password='12345')
+        self.user2 = User.objects.create_user(username='test2', password='12345')
+        self.client.force_login(self.user1)
+
+    def test_follow(self):
+        response = self.client.post(
+            reverse('posts:profile_follow', args=[self.user2.username])
+        )
+
+        self.assertEqual(response.status_code, 302)
+
+        self.assertTrue(
+            Follow.objects.filter(user=self.user1, author=self.user2).exists()
+        )
+
+    def test_unfollow(self):
+        Follow.objects.create(user=self.user1, author=self.user2)
+        response = self.client.post(
+            reverse('posts:profile_unfollow', args=[self.user2.username])
+        )
+
+        self.assertEqual(response.status_code, 302)
+
+        self.assertFalse(
+            Follow.objects.filter(user=self.user1, author=self.user2).exists()
+        )
+
+    def test_post_in_follow_feed(self):
+        Follow.objects.create(user=self.user1, author=self.user2)
+
+        post = Post.objects.create(
+            author=self.user2, text='Test post'
+        )
+
+        response = self.client.get(reverse('posts:follow_index'))
+        self.assertContains(response, post.text)
+
+    def test_post_not_in_follow_feed(self):
+        post = Post.objects.create(
+            author=self.user2, text='Test post'
+        )
+
+        response = self.client.get(reverse('posts:follow_index'))
+        self.assertNotContains(response, post.text)
